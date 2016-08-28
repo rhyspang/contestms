@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+<html lang="zh-CN" xmlns:accounts="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <meta name="description" content="">
+    <meta name="author" content="庞胜">
+    <style type="text/css">
+        body {
+            padding-top: 60px;
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <div class="container">
+
+  {% if password_is_wrong %}
+    <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        用户名或密码错误!
+    </div>
+
+  {% endif %}
+
+  <div class="well">
+      <h1>ACM基地比赛系统</h1>
+      <p></p>
+      <form class="form-horizontal" action="" method="post" >
+      {% csrf_token %}
+      {% bootstrap_form form %}
+        <p class="form-actions">
+          <input type="submit" value="登录" class="btn btn-primary">
+          <a href="#"><input type="button" value="忘记密码" class="btn btn-danger"></a>
+          <a href="#"><input type="button" value="未注册" class="btn btn-success"
+                             onclick='javascrtpt:window.location.href="{% url 'accounts:register' %}"'></a>
+        </p>
+      </form>
+  </div>
+  </div>
+</body>
+</html>
+
+
