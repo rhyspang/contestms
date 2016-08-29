@@ -15,19 +15,29 @@
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
 
-{# Display a form #}
-    <form action="/url/to/submit/" method="post" class="form">
-      {% csrf_token %}
-      {% bootstrap_form form %}
-      {% buttons %}
-        <button type="submit" class="btn btn-primary">
-          {% bootstrap_icon "star" %} Submit
-        </button>
-      {% endbuttons %}
-    </form>
+  {% if register_fail %}
+      <div class="alert alert-danger alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          注册信息有误!
+      </div>
+  {% endif %}
 
-{# Read the documentation for more information #}
-
-
+  <div class="container">
+    <div class="well">
+    <h1>请准确填写注册信息</h1>
+     <form action="" method="post" class="form">
+       {% csrf_token %}
+        {% bootstrap_form register_form %}
+        {% buttons %}
+          <button type="submit" class="btn btn-primary" >
+            {% bootstrap_icon "star" %} 注册
+          </button>
+          <button type="submit" class="btn btn-primary" >
+            {% bootstrap_icon "star" %} 返回登录
+          </button>
+        {% endbuttons %}
+      </form>
+    </div>
+  </div>
 </body>
 </html>

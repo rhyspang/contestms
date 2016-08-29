@@ -2,8 +2,9 @@
 from django import forms
 from contestms.models import *
 
-
 # Register your models here.
+ALLOW_CHAR = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_'
+
 
 class RegisterForm(forms.Form):
     GENDER_CHOICES = (
@@ -32,55 +33,40 @@ class RegisterForm(forms.Form):
     re_password = forms.CharField(label=u"重复密码", max_length=20,
                                   widget=forms.PasswordInput(attrs={'size': 20, 'class': "form-control"}))
 
-    # def clean_name(self):
+    def clean_name(self):
+        if len(self.cleaned_data['name']) < 2 or len(self.cleaned_data['name']) > 10:
+            raise forms.ValidationError(u'姓名长度不合法')
+        user = User.objects.filter(username__iexact=self.cleaned_data['name'])
+        if not user:
+            return self.cleaned_data['name']
+        else:
+            raise forms.ValidationError(u'该姓名已注册!')
 
-    #     if len(self.cleaned_data["name"])<4:
-    #         raise forms.ValidationError(u"昵称长度不能小于4")
-    #     else:
-    #         for a in self.cleaned_data["name"]:
-    #             if a not in ALLOW_CHAR:
-    #                 raise forms.ValidationError(u"昵称仅能用字母或数字")
+    def clean_password(self):
+        for a in self.cleaned_data['password']:
+            if a not in ALLOW_CHAR:
+                raise forms.ValidationError(u'密码只能包含数字字母下划线')
+        return self.cleaned_data['password']
 
-    #     users = User.objects.filter(username__iexact=self.cleaned_data["username"])
-    #     if not users:
-    #         return self.cleaned_data["username"]
-    #     else:
-    #         raise forms.ValidationError(u"该昵称已经被使用请使用其他的昵称")
-
-    # def clean_password(self):
-    #     if len(self.cleaned_data["password"])<6:
-    #         raise forms.ValidationError(u"密码长度不能小于6")
-    #     else:
-    #         for a in self.cleaned_data["password"]:
-    #             if a not in ALLOW_CHAR:
-    #                 raise forms.ValidationError(u"密码仅能用字母或数字")
-    #     return self.cleaned_data["password"]
-
-    # def clean(self):
-    #     """验证其他非法"""
-    #     cleaned_data = super(RegisterForm, self).clean()
-
-    #     if cleaned_data.get("password") == cleaned_data.get("username"):
-    #         raise forms.ValidationError(u"用户名和密码不能一样")
-    #     if cleaned_data.get("password") != cleaned_data.get("re_password"):
-    #         raise forms.ValidationError(u"两次输入密码不一致")
-
-    #     return cleaned_data
-
-
-
+    def clean(self):
+        cleaned_data = super(RegisterForm, self).clean()
+        if cleaned_data.get("password") == cleaned_data.get("name"):
+            raise forms.ValidationError(u"用户名和密码不能一样")
+        if cleaned_data.get("password") != cleaned_data.get("re_password"):
+            raise forms.ValidationError(u"两次输入密码不一致")
+        return cleaned_data
 
     def save(self):
-        name = self.name
-        gender = self.gender
-        class_name = self.class_name
-        tel_num = self.tel_num
-        qq_num = self.qq_num
-        stu_id = self.stu_id
-        remark = self.remark
-        password = self.password
+        name = self.cleaned_data['name']
+        gender = self.cleaned_data['gender']
+        class_name = self.cleaned_data['class_name']
+        tel_num = self.cleaned_data['tel_num']
+        qq_num = self.cleaned_data['qq_num']
+        stu_id = self.cleaned_data['stu_id']
+        remark = self.cleaned_data['remark']
+        password = self.cleaned_data['password']
 
-        contestant = User.objects.create(
+        user = User.objects.create_user(
             username=name,
             gender=gender,
             class_name=class_name,
@@ -90,7 +76,7 @@ class RegisterForm(forms.Form):
             comment=remark,
             password=password
         )
-        return contestant
+        return user
 
 
 class LoginForm(forms.Form):
@@ -115,9 +101,15 @@ class LoginForm(forms.Form):
         ),
     )
 
+    def clean_username(self):
+        user = User.objects.filter(username__iexact=self.cleaned_data['username'])
+        if not user:
+            return forms.ValidationError(u'用户不存在')
+        else:
+            return self.cleaned_data['username']
+
     def clean(self):
         if not self.is_valid():
             raise forms.ValidationError(u'请准确填写用户名和密码')
         else:
-            self.cleaned_data = super(LoginForm, self).clean()
-
+            cleaned_data = super(LoginForm, self).clean()

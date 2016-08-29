@@ -1,73 +1,54 @@
 # coding: utf-8
 
-from django.contrib.auth import authenticate
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
-from django.urls import reverse
 from django.contrib import auth
-
+from django.contrib.auth import authenticate
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from accounts.forms import RegisterForm, LoginForm
+from django.core.urlresolvers import reverse
 
 
 def login(request):
     if request.method == 'GET':
-        form = LoginForm()
-        return render(request, 'accounts/login.html', {'form': form, })
+        login_form = LoginForm()
+        return render(request, 'accounts/login.html', {'login_form': login_form,})
     else:
-        form = LoginForm(request.POST)
-        if form.is_valid():
+        login_form = LoginForm(request.POST)
+        if login_form.is_valid():
             username = request.POST.get('username', '')
             password = request.POST.get('password', '')
             user = authenticate(username=username, password=password)
             if user is not None and user.is_active:
                 auth.login(request, user)
+                # return HttpResponseRedirect(reverse('polls:results', args=(p.id,)))
                 return HttpResponseRedirect(reverse('contestms:contests_list'))
             else:
-                return render(request, 'accounts/login.html', {'form': form, 'password_is_wrong': True, })
+                return render(request,
+                              'accounts/login.html',
+                              {'login_form': login_form, 'password_is_wrong': True, 'username': username})
         else:
-            return render(request, 'accounts/login.html', {'form': form, })
+            return render(request, 'accounts/login.html', {'login_form': login_form, })
 
 
-    # template_var = {}
-    # if request.method == 'POST':
-    #     username = request.POST.get('username')
-    #     password = request.POST.get('password')
-    #     if _login(request, username, password, template_var):
-    #         try:
-    #             tmp = request.GET['next']
-    #             return HttpResponseRedirect(tmp)
-    #         except:
-    #             return HttpResponseRedirect(reverse('contestms:contests_list'))
-    #     template_var.update({'username': username})
-    # return render(request, 'accounts/login.html', template_var)
-
-
+@login_required
 def logout(request):
-    return HttpResponse('logout page')
+    auth.logout(request)
+    return HttpResponseRedirect(reverse('accounts:login'))
 
 
 def register(request):
-    template_var = {}
-    form = RegisterForm()
-    if request.method == 'POST':
-        form = RegisterForm(request.POST.copy())
-        if form.is_valid():
-            form.save()
-            if _login(request, form.cleaned_data['username'], form.cleaned_data['password'], template_var):
-                return HttpResponseRedirect(reverse("contestms: contests_list"))
-    template_var['form'] = form
-    return render(request, "accounts/register.html", template_var)
-
-
-    return HttpResponse('register page')
-
-
-def _login(request, username, password, template_var):
-    ret = False
-    user = authenticate(username=username, password=password)
-    if user is not None:
-        auth_login(request, user)
-        ret = True
+    if request.method == 'GET':
+        register_form = RegisterForm()
+        # wrong to write template firstly
+        return render(request, 'accounts/register.html', {'register_form': register_form,})
     else:
-        template_var['error'] = u'用户' + username + u'不存在或密码错误'
-    return ret
+        register_form = RegisterForm(request.POST)
+        if register_form.is_valid():
+            register_form.save()
+            return HttpResponseRedirect(reverse('accounts:login'))
+        else:
+            return render(request,
+                          'accounts/register.html',
+                          {'register_form': register_form, 'register_fail': True,})
+

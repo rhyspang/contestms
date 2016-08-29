@@ -17,7 +17,7 @@ class Contest(models.Model):
 
 class User(AbstractUser):
     contests = models.ManyToManyField(Contest, through='Contest_user')
-    gender = models.CharField(max_length=2)
+    gender = models.CharField(max_length=20)
     class_name = models.CharField(max_length=20)
     stu_id = models.CharField(max_length=20)
     tel_num = models.CharField(max_length=20)
