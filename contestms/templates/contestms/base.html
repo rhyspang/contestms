@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)http://v3.bootcss.com/examples/navbar-fixed-top/ -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  {% load staticfiles %}
+  {% load bootstrap3 %}
+  {% bootstrap_css %}
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="{% static 'contestms/images/kaola.png' %}">
+
+    <title>{% block title %}USTH-ACM算法与程序设计基地{% endblock %}</title>
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'contestms/css/navbar-fixed-top.css' %}" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+
+    <script src="{% static 'contestms/js/ie-emulation-modes-warning.js'%}"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{% url 'contestms:contests_list' %}">比赛管理系统</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">{% block p2 %}比赛列表{% endblock %}</a></li>
+            <li><a href="">关于</a></li>
+            <li><a href="">联系我们</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            {% if request.user.is_authenticated %}
+              <li><a href="#">{{request.user}}</a></li>
+              <li><a href="{% url 'accounts:logout' %}">注销</a></li>
+            {% else %}
+              <li><a href="{% url 'accounts:login' %}">登录</a></li>
+            {% endif %}
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    <div class="container">
+    {% block content %}
+    {% endblock %}
+    </div>
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="{% static 'contestms/js/ie10-viewport-bug-workaround.js'%}"></script>
+
+  </body>
+</html>

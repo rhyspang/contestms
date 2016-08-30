@@ -1,0 +1,18 @@
+{% extends 'contestms/contest_detail_base.html' %}
+{% block list_active %}class="active"{% endblock %}
+
+{% block contest_content %}
+<table class="table table-hover">
+  <th>
+    <td>题目编号</td>
+    <td>标题</td>
+  </th>
+  {% for question, a in questions_info.items %}
+  <tr>
+    <td></td>
+    <td><a href="{% url 'contestms:question_detail' question.id %}">{{ a }}</a> </td>
+    <td><a href="{% url 'contestms:question_detail' question.id %}">{{question.title}}</a></td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

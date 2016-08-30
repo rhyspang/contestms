@@ -1,0 +1,53 @@
+{% extends 'contestms/base.html' %}
+{% block title %}
+USTH-ACM算法与程序设计基地
+{% endblock %}
+
+{% block content%}
+
+
+      <!-- Main component for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <h1>USTH-ACM/ICPC</h1>
+        <p>欢迎参加黑龙江科技大学ACM/ICPC算法与程序设计基地比赛.</p>
+        <p>
+          <a class="btn btn-lg btn-primary" href="#" role="button">了解更多»</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="container">
+      <table class="table table-hover">
+				<thead>
+					<tr class="info">
+						<th>比赛编号</th>
+						<th>比赛名称</th>
+						<th>开始时间</th>
+						<th>比赛时长</th>
+            <th></th>
+					</tr>
+				</thead>
+				<tbody>
+        {% for contest, i in contest_list.items %}
+
+          {% if i.1 %}
+					<tr class="success">
+          {% else %}
+          <tr class="error">
+          {% endif %}
+						<td>{{ forloop.counter }}</td>
+            <td><a href="{% url 'contestms:contest_detail_list' contest.id %}"> {{ contest.name }}</a></td>
+						<td>{{ contest.start_time }}</td>
+						<td>{{ contest.duration }}</td>
+            <td> <a href="{% url 'contestms:contests_list' %}?u_id={{request.user.id}}&c_id={{ contest.id }}">
+                  <span class="badge badge-important">
+                    {% if i.1 %}已{% endif %}报名{{ i.0}}
+                  </span>
+                 </a>
+            </td>
+					</tr>
+        {% endfor %}
+				</tbody>
+			</table>
+
+{% endblock %}

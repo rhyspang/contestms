@@ -12,7 +12,7 @@ class Contest(models.Model):
     duration = models.DurationField()
 
     def __unicode__(self):
-        return self.contest_name
+        return self.name
 
 
 class User(AbstractUser):

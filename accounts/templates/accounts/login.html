@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 {% load bootstrap3 %}
 {% bootstrap_css %}
-{% bootstrap_javascript %}
-{# Display django.contrib.messages as Bootstrap alerts #}
-{% bootstrap_messages %}
 
-<html lang="zh-CN" xmlns:accounts="http://www.w3.org/1999/xhtml">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <title>登录</title>
@@ -44,7 +41,7 @@
             </button>
             <button type="button" class="btn btn-success"
                 onclick='javascrtpt:window.location.href="{% url 'accounts:register' %}"' >
-              {% bootstrap_icon "glyphicon glyphicon-star-empty" %} 注&nbsp;&nbsp;册
+              {% bootstrap_icon "glyphicon glyphicon-plus" %} 注&nbsp;&nbsp;册
             </button>
         {% endbuttons %}
         </form>
