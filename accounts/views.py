@@ -21,7 +21,9 @@ def login(request):
             user = authenticate(username=username, password=password)
             if user is not None and user.is_active:
                 auth.login(request, user)
-                # return HttpResponseRedirect(reverse('polls:results', args=(p.id,)))
+
+                if user.is_staff:
+                    return HttpResponseRedirect(reverse('contestms:contest_manager'))
                 return HttpResponseRedirect(reverse('contestms:contests_list'))
             else:
                 return render(request,

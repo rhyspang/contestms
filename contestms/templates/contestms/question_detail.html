@@ -1,6 +1,8 @@
 {% extends 'contestms/base.html' %}
 
 {% block content %}
-    <h4>{{question.title}}</h4>
-    <p>{{ question.content }}</p>
+    <div class="starter-template">
+        <h1>{{question.title}}</h1>
+        <p class="lead">{{question.content}}</p>
+      </div>
 {% endblock %}

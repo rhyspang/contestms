@@ -1,10 +1,7 @@
 from __future__ import unicode_literals
-
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-
-# Create your models here.
 
 class Contest(models.Model):
     name = models.CharField(max_length=200)
@@ -71,6 +68,9 @@ class GradeInfo(models.Model):
     sub_times = models.PositiveSmallIntegerField(default=0)
     wrong_times = models.PositiveSmallIntegerField(default=0)
 
+    def __unicode__(self):
+        return self.user.username + '-' + self.question.title
+
     class Meta:
         unique_together = ('contest', 'user', 'question')
 
@@ -94,4 +94,3 @@ class Contest_question(models.Model):
 
     def __unicode__(self):
         return self.contest.name + '-' + self.question.title
-

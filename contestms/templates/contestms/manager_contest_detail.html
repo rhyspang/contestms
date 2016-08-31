@@ -1,0 +1,44 @@
+{% extends 'contestms/base.html' %}
+
+{% block p2 %}比赛信息{% endblock %}
+
+{% block content %}
+<div class="progress">
+  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+    <span class="sr-only">60% Complete</span>
+  </div>
+</div>
+
+<ul class="nav nav-tabs">
+  <li role="presentation" class="active"><a href="{% url 'contestms:manager_contest_detail_list' c_id %}">申请列表</a></li>
+  <li role="presentation"><a href="{% url 'contestms:manager_contest_update' c_id %}">更新</a></li>
+</ul>
+
+<form action="" method="post">
+{% csrf_token %}
+<table class="table table-hover">
+  <th>
+    <td></td>
+    <td>申请编号</td>
+    <td>姓名</td>
+    <td>班级</td>
+    <td>申请时间</td>
+    <td></td>
+  </th>
+  {% for a in apls %}
+  <tr>
+    <td></td>
+    <td>{{ forloop.counter }}</td>
+    <td>{{ a.id }}</td>
+    <td>{{ a.user }}</td>
+    <td>{{ a.user.class_name }}</td>
+    <td>{{ a.apply_time }}</td>
+    <td>
+      <input type="checkbox" id="blankCheckbox" name="handle_list" value="{{ a.id }}" >
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+<button type="submit" class="btn btn-primary btn-lg btn-block">确定</button>
+</form>
+{% endblock %}

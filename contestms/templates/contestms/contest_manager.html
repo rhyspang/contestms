@@ -1,21 +1,8 @@
 {% extends 'contestms/base.html' %}
-{% block title %}
-USTH-ACM算法与程序设计基地
-{% endblock %}
+
+{% block title %}管理界面{% endblock %}
 
 {% block content%}
-
-
-      <!-- Main component for a primary marketing message or call to action -->
-      <div class="jumbotron">
-        <h1>USTH-ACM/ICPC</h1>
-        <p>欢迎参加黑龙江科技大学ACM/ICPC算法与程序设计基地比赛.</p>
-        <p>
-          <a class="btn btn-lg btn-primary" href="#" role="button">了解更多»</a>
-        </p>
-      </div>
-    </div>
-
     <div class="container">
       <table class="table table-hover">
 				<thead>
@@ -36,7 +23,7 @@ USTH-ACM算法与程序设计基地
           <tr class="error">
           {% endif %}
 						<td>{{ forloop.counter }}</td>
-            <td><a href="{% url 'contestms:contest_detail_list' contest.id %}"> {{ contest.name }}</a></td>
+            <td><a href="{% url 'contestms:manager_contest_detail_list' contest.id %}"> {{ contest.name }}</a></td>
 						<td>{{ contest.start_time }}</td>
 						<td>{{ contest.duration }}</td>
 

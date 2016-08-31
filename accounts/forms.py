@@ -87,6 +87,7 @@ class LoginForm(forms.Form):
         widget=forms.TextInput(
             attrs={
                 'placeholder': u'请输入姓名',
+                'class': 'input_style',
             }
         ),
     )
@@ -97,6 +98,7 @@ class LoginForm(forms.Form):
         widget=forms.PasswordInput(
             attrs={
                 'placeholder': u'请输入密码',
+                'class': 'input_style',
             }
         ),
     )

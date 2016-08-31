@@ -4,15 +4,13 @@
     <meta charset="UTF-8">
     <title>注册</title>
 </head>
-<body>
-{# Load the tag library #}
-{% load bootstrap3 %}
 
-{# Load CSS and JavaScript #}
+
+<body>
+
+{% load bootstrap3 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-
-{# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
 
   {% if register_fail %}
@@ -22,12 +20,12 @@
 </div>
 {% endif %}
 
-<div class="container-fluid">
-  <div class="row-fluid">
-    <div class="span4">
-    </div>
-    <div class="span4">
+
+<div class="register_style">
       <div class="container">
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
             <div class="well">
               <h1>请准确填写注册信息</h1>
               <form action="" method="post" class="form">
@@ -45,10 +43,9 @@
                 {% endbuttons %}
              </form>
             </div>
-          </div>
-      </div>
-    </div>
-    <div class="span4">
+            </div>
+            <div class="col-md-2"></div>
+            </div>
     </div>
   </div>
 
