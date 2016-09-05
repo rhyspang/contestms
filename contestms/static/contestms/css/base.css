@@ -1,0 +1,55 @@
+<style type="text/css">
+#customers
+  {
+  font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+  width:90%;
+  text-align:center;
+  }
+
+#customers td, #customers th 
+  {
+text-align:center;
+  font-size:1em;
+  padding:3px 7px 2px 7px;
+  height:50px;
+	
+  }
+
+#customers th 
+  {
+  border:white;
+  font-size:1.1em;
+  padding-top:5px;
+  padding-bottom:4px;
+  background-color:#ffffff;
+  height:50px;
+  color:#000000;
+  }
+
+#customers tr td.question 
+  {
+  width:65px;
+  color:#000000;
+  background-color:#ffffff;
+  }
+ #customers tr td.info
+  {
+  width:65px;
+  background-color:#ccddff;
+  }
+#customers tr td.fb
+  {
+   width:65px;
+   background-color:#008800;
+  }
+#customers tr td.nofb
+  {
+   width:65px;
+   background-color:#a9f5af;
+  }
+#customers tr td.noac
+  {
+   width:65px;
+  	background-color:#ffdddd;
+  }  
+</style>
