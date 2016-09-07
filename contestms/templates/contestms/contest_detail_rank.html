@@ -2,8 +2,58 @@
 {% block rank_active %}class="active"{% endblock %}
 
 {% block contest_content %}
+{% load staticfiles %}
+<!--<link href="{% static 'contestms/css/base.css' %}" rel="stylesheet">-->
+<table class="table table-hover" style="border:1px solid silver;magin-top:50px;">
+  <thead>
+  <tr class="success">
+    <th style="text-align:center; vertical-align:center;">Rank</th>
+    <th style="text-align:center; vertical-align:center;">Name</th>
+    <th style="text-align:center; vertical-align:center;">Solved</th>
+    <th style="text-align:center; vertical-align:center;">Penalty</th>
+    {% for i in q_alpha %}
+    <th style="text-align:center; vertical-align:center;">{{ i }}</th>
+    {% endfor %}
+  </tr>
+  </thead>
 
+  {% for contestant in list_info %}
+  <tr style="text-align:center; vertical-align:center;">
+    <td style="width: 68px; height:50px; text-align:center; vertical-align:center; background-color:#ccddff;">{{ forloop.counter }}</td>
+    <td style="width: 68px; height:50px; text-align:center; vertical-align:center; background-color:#ccddff;">{{ contestant.name }}</td>
+    <td style="width: 68px; height:50px; text-align:center; vertical-align:center; background-color:#ccddff;">{{ contestant.ac_num }}</td>
+    <td style="width: 68px; height:50px; text-align:center; vertical-align:center; background-color:#ccddff;">{{ contestant.penalty }}</td>
 
+    {% for question in contestant.questions %}
 
+      {% if question.sub_times == 0 %}
+        <td style="width: 68px; height:50px; "></td>
+      {% endif %}
+
+      {% if question.accepted is False and question.sub_times is not 0 %}
+        <td style="width: 68px; height:50px; text-align:center; vertical-align:center; background-color:#ffdddd; ">&nbsp;&nbsp;&nbsp;(-{{question.wrong_times }})&nbsp;&nbsp;</td>
+      {% endif %}
+
+      {% if question.accepted is True and question.wrong_times is 0 and question.is_fb is False %}
+        <td style="width: 68px; height:50px; text-align:center; vertical-align:center;">{{question.ac_time|date:" H:i:s"}}</td>
+      {% endif %}
+
+      {% if question.accepted and question.wrong_times != 0 and question.is_fb == False %}
+        <td style="width: 68px; height:50px; vertical-align:center;text-align:center; background-color:#a9f5af;">{{question.ac_time|date:" H:i:s"}}<br>(-{{question.wrong_times }})</td>
+      {% endif %}
+
+      {% if question.is_fb is True and question.wrong_times is 0 %}
+        <td style="width: 68px; height:50px; vertical-align:center;text-align:center; background-color:#a9f5af;">{{question.ac_time|date:" H:i:s"}}</td>
+      {% endif %}
+
+      {% if question.is_fb == True and question.wrong_times != 0 %}
+        <td style="width: 68px; height:50px; vertical-align:center;text-align:center;">{{question.ac_time|date:" H:i:s"}}<br>(-{{question.wrong_times }})</td>
+      {% endif %}
+
+    {% endfor %}
+    </tr>
+  {% endfor %}
+
+</table>
 
 {% endblock %}

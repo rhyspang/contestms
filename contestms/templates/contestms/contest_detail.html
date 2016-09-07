@@ -2,11 +2,14 @@
 {% block list_active %}class="active"{% endblock %}
 
 {% block contest_content %}
-<table class="table table-hover">
-  <th>
+<table class="table table-hover" style="border:1px solid silver;magin-top:50px;">
+  <thead>
+  <tr class="success">
+    <td></td>
     <td>题目编号</td>
     <td>标题</td>
-  </th>
+  </tr>
+  </thead>
   {% for question, a in questions_info.items %}
   <tr>
     <td></td>

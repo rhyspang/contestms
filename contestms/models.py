@@ -29,9 +29,16 @@ class Question(models.Model):
     contests = models.ManyToManyField(Contest, through='Contest_question')
     title = models.CharField(max_length=200)
     content = models.TextField()
+    hint = models.TextField(null=True)
 
     def __unicode__(self):
         return self.title
+
+
+class Example(models.Model):
+    question = models.ForeignKey(Question)
+    input = models.TextField()
+    output = models.TextField()
 
 
 class SubmitInfo(models.Model):
@@ -91,6 +98,9 @@ class Contest_question(models.Model):
     contest = models.ForeignKey(Contest)
     question = models.ForeignKey(Question)
     date_added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('contest', 'question')
 
     def __unicode__(self):
         return self.contest.name + '-' + self.question.title

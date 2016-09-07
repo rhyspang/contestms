@@ -30,7 +30,7 @@ def login(request):
                               'accounts/login.html',
                               {'login_form': login_form, 'password_is_wrong': True, 'username': username})
         else:
-            return render(request, 'accounts/login.html', {'login_form': login_form, })
+            return render(request, 'accounts/login.html', {'login_form': login_form,})
 
 
 @login_required
@@ -43,7 +43,7 @@ def register(request):
     if request.method == 'GET':
         register_form = RegisterForm()
         # wrong to write template firstly
-        return render(request, 'accounts/register.html', {'register_form': register_form,})
+        return render(request, 'accounts/register.html', {'register_form': register_form, })
     else:
         register_form = RegisterForm(request.POST)
         if register_form.is_valid():
@@ -53,4 +53,3 @@ def register(request):
             return render(request,
                           'accounts/register.html',
                           {'register_form': register_form, 'register_fail': True,})
-

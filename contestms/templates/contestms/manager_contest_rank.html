@@ -1,10 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+{% extends 'contestms/base.html' %}
 
-</body>
-</html>
+{% block p2 %}比赛信息{% endblock %}
+
+{% block content %}
+<div class="progress">
+  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+    <span class="sr-only">60% Complete</span>
+  </div>
+</div>
+
+<ul class="nav nav-tabs">
+  <li role="presentation"><a href="{% url 'contestms:manager_contest_detail_list' c_id %}">申请列表</a></li>
+  <li role="presentation"><a href="{% url 'contestms:manager_contest_update' c_id %}">更新</a></li>
+  <li role="presentation" class="active"><a href="{% url 'contestms:manager_contest_rank' c_id %}">排名</a></li>
+</ul>
+
+
+{% load staticfiles %}
+<link href="{% static 'contestms/css/base.css' %}" rel="stylesheet">
+<table class="table table-hover">
+  <thead>
+  <tr class="info">
+    <th>Rank</th>
+    <th>Name</th>
+    <th>Solved</th>
+    <th>Penalty</th>
+    {% for i in q_alpha %}
+    <th class="th_style">{{ i }}</th>
+    {% endfor %}
+  </tr>
+  </thead>
+
+  {% for contestant in list_info %}
+  <tr>
+    <td class="info">{{ forloop.counter }}</td>
+    <td class="info">{{ contestant.name }}</td>
+    <td class="info">{{ contestant.ac_num }}</td>
+    <td class="info">{{ contestant.penalty }}</td>
+
+    {% for question in contestant.questions %}
+
+      {% if question.sub_times == 0 %}
+        <td class="question"></td>
+      {% endif %}
+
+      {% if question.accepted is False and question.sub_times is not 0 %}
+        <td>&nbsp;&nbsp;&nbsp;(-{{question.wrong_times }})&nbsp;&nbsp;</td>
+      {% endif %}
+
+      {% if question.accepted is True and question.wrong_times is 0 and question.is_fb is False %}
+        <td>{{question.ac_time|date:" H:i:s"}}</td>
+      {% endif %}
+
+      {% if question.accepted and question.wrong_times != 0 and question.is_fb == False %}
+        <td class="nofb">{{question.ac_time|date:" H:i:s"}}<br>(-{{question.wrong_times }})</td>
+      {% endif %}
+
+      {% if question.is_fb is True and question.wrong_times is 0 %}
+        <td class="fb">{{question.ac_time|date:" H:i:s"}}</td>
+      {% endif %}
+
+      {% if question.is_fb == True and question.wrong_times != 0 %}
+        <td class="fb">{{question.ac_time|date:" H:i:s"}}<br>(-{{question.wrong_times }})</td>
+      {% endif %}
+
+    {% endfor %}
+    </tr>
+  {% endfor %}
+
+</table>
+
+
+{% endblock %}

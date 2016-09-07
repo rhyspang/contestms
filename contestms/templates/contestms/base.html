@@ -42,13 +42,13 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="{% url 'contestms:contests_list' %}">比赛管理系统</a>
+          <a class="navbar-brand" href="{% block homePageUrl %}{% url 'contestms:contests_list' %}{% endblock %}">USTH-ACM/ICPC</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">{% block p2 %}比赛列表{% endblock %}</a></li>
-            <li><a href="">关于</a></li>
-            <li><a href="">联系我们</a></li>
+            <li {% block listActive %}class="active"{% endblock %}><a href="{% url 'contestms:contests_list' %}">{% block p2 %}比赛列表{% endblock %}</a></li>
+            <li {% block aboutActive %}{% endblock %}><a href="{% url 'contestms:about' %}">关于</a></li>
+            <li {% block contactActive %}{% endblock %}><a href="">联系我们</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {% if request.user.is_authenticated %}

@@ -5,18 +5,31 @@ USTH-ACM算法与程序设计基地
 
 {% block content%}
 
+<div id="smModal1" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <center><p4>请先报名!</p4></center>
+    </div>
+  </div>
+</div>
+<div id="smModal2" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <center><p4>比赛报名信息待审核！</p4></center>
+    </div>
+  </div>
+</div>
+
 
       <!-- Main component for a primary marketing message or call to action -->
+
+
+    <div class="container">
       <div class="jumbotron">
         <h1>USTH-ACM/ICPC</h1>
         <p>欢迎参加黑龙江科技大学ACM/ICPC算法与程序设计基地比赛.</p>
-        <p>
-          <a class="btn btn-lg btn-primary" href="#" role="button">了解更多»</a>
-        </p>
+        <p><a class="btn btn-lg btn-primary" href="{% url 'contestms:about' %}" role="button">了解更多»</a></p>
       </div>
-    </div>
-
-    <div class="container">
       <table class="table table-hover">
 				<thead>
 					<tr class="info">
@@ -36,14 +49,83 @@ USTH-ACM算法与程序设计基地
           <tr class="error">
           {% endif %}
 						<td>{{ forloop.counter }}</td>
-            <td><a href="{% url 'contestms:contest_detail_list' contest.id %}"> {{ contest.name }}</a></td>
-						<td>{{ contest.start_time }}</td>
-						<td>{{ contest.duration }}</td>
 
+            {% if i.1 is False %}
+              <td><a data-toggle="modal" href="#smModal1" >{{ contest.name }}</a></td>
+            {% endif %}
+
+            {% if i.1 and i.2 is False %}
+              <td><a data-toggle="modal" href="#smModal2" >{{ contest.name }}</a></td>
+            {% endif %}
+
+
+            {% if i.1 and i.2 %}
+
+              {% if i.3 <= 0 %}
+              <td><a href="#myModal{{ forloop.counter }}" data-toggle="modal" >{{ contest.name }}</a></td>
+                  <div class="modal fade" id="myModal{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                          <h4 class="modal-title" id="myModalLabel">比赛细则</h4>
+                        </div>
+                        <div class="modal-body">
+                          <ul>
+                            <li>比赛时长为五小时, 实时更新排名, 请关注排名榜单.</li>
+                            <li>比赛期间不得使用手机,U盘等电子设备,不得交头接耳, 不得无故离开座位.违者视为作弊.</li>
+                            <li>选手可携带任何非电子类资料，包括书籍和打印出来的程序等.</li>
+                            <li>每完成一题后可举手示意监考人员提交试题.</li>
+                            <li>若发现参赛选手有抄袭等作弊行为, 取消比赛资格.</li>
+                            <li>如有任何疑问举手示意监考人员.</li>
+                          </ul>
+
+                        </div>
+                        <div class="modal-footer">
+
+
+
+                          <button type="button" class="btn btn-default" data-dismiss="modal">不接受</button>
+                          <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                  onclick='javascrtpt:window.location.href="{% url 'contestms:contest_detail_list' contest.id %}"'>接受</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {% else %}
+                 <td><a href="#myModal{{ forloop.counter }}" data-toggle="modal" >{{ contest.name }}</a></td>
+                  <div class="modal fade" id="myModal{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                          <h4 class="modal-title" id="myModalLabel">审核通过</h4>
+                        </div>
+                        <div class="modal-body">
+
+
+                          {% load staticfiles %}
+                          <script src="{% static 'contestms/js/timer.js' %}"></script>
+                          <div id="remainSeconds" style="display:none">{{ i.3 }}</div>
+                          距比赛开始还有<div id="remainTime" style="font-size:20px;"></div>
+
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">确定</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                {% endif %}
+            {% endif %}
+
+            <td>{{ contest.start_time }}</td>
+						<td>{{ contest.duration }}</td>
             {% if request.user.is_authenticated %}
             <td> <a href="{% url 'contestms:contests_list' %}?u_id={{request.user.id}}&c_id={{ contest.id }}">
                   <span class="badge badge-important">
-                    {% if i.1 %}已{% endif %}报名{{ i.0}}
+                    {% if i.1 %}已{% endif %}报名{{ i.0 }}
                   </span>
                  </a>
             </td>
@@ -59,5 +141,6 @@ USTH-ACM算法与程序设计基地
         {% endfor %}
 				</tbody>
 			</table>
+      </div>
 
 {% endblock %}

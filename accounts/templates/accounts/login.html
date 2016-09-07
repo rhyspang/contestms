@@ -25,8 +25,15 @@
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       <strong>提示!</strong> 用户名或密码错误!
     </div>
-
     {% endif %}
+
+    {% if message %}
+      <div class="alert alert-warning alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <strong>提示!</strong> {{ message }}
+    </div>
+    {% endif %}
+
       <div class="login_logo">
        <img src="{% static 'accounts/images/logo.png' %}">
       </div>

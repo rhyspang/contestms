@@ -14,4 +14,9 @@ urlpatterns = [
                     name='manager_contest_detail_list'),
     url(r'^manager_contest_update_(?P<contest_id>[0-9]+)/$', views.manager_contest_update,
         name='manager_contest_update'),
+    url(r'^manager_contest_rank_(?P<pk>[0-9]+)/$', views.manager_contest_rank,
+        name='manager_contest_rank'),
+
+    url(r'^about/$', views.about, name='about'),
+
 ]

@@ -11,12 +11,12 @@
 
 <ul class="nav nav-tabs">
   <li role="presentation"><a href="{% url 'contestms:manager_contest_detail_list' c_id %}">申请列表</a></li>
-  <li role="presentation" class="active"><a href="{% url 'contestms:manager_contest_update' c_id %}">提交</a></li>
+  <li role="presentation" class="active"><a href="{% url 'contestms:manager_contest_update' c_id %}">更新</a></li>
+  <li role="presentation"><a href="{% url 'contestms:manager_contest_rank' c_id %}">排名</a></li>
 </ul>
 
 
 <div class="container">
-
 
   {% if message %}
     {% if accepted is True %}
@@ -51,8 +51,8 @@
         <br>
 
         <select class="form-control" name="q_id">
-          {% for question,i in questions_info.items %}
-          <option value="{{ question.id }}">{{ i }}.{{ question }}</option>
+          {% for question in questions_info %}
+          <option value="{{ question.0.id }}">{{ question.1 }}. {{ question.0 }}</option>
           {% endfor %}
         </select>
 
