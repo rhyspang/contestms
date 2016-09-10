@@ -1,6 +1,6 @@
-{% extends 'contestms/base.html' %}
+{% extends 'contestms/contest_detail_base.html' %}
 
-{% block content %}
+{% block contest_content %}
 
     <style>
      pre {
@@ -8,19 +8,12 @@
             white-space: pre-wrap;
             word-wrap: break-word;
         }
-       </style>
-
-    <div class="progress">
-      <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ used_time }}%;">
-        <span class="sr-only">60% Complete</span>
-      </div>
-    </div>
-
+     </style>
 
     {% autoescape off %}
     <div class="well" style="background-color:white">
 
-        <h1><center>{{question.title}}</center></h1>
+        <h1><center>{{alpha_id}}.{{question.title}}</center></h1>
         <h3>描述</h3>
 
         <p class="lead"><pre>{{question.content}}</pre>
@@ -29,8 +22,8 @@
         {% for example in examples %}
         <h3>样例{{ forloop.counter }}</h3>
         <pre>
-        <p>输入:<p>{{ example.input }}
-        <p>输出:<p>{{ example.output }}
+        <p>输入:</p>{{ example.input }}
+        <p>输出:</p>{{ example.output }}
         </pre>
         {% endfor %}
 

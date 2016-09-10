@@ -13,8 +13,8 @@
   {% for question, a in questions_info.items %}
   <tr>
     <td></td>
-    <td><a href="{% url 'contestms:question_detail' question.id %}">{{ a }}</a> </td>
-    <td><a href="{% url 'contestms:question_detail' question.id %}">{{question.title}}</a></td>
+    <td><a href="{% url 'contestms:question_detail' c_id question.id %}">{{ a }}</a> </td>
+    <td><a href="{% url 'contestms:question_detail' c_id question.id %}">{{question.title}}</a></td>
   </tr>
   {% endfor %}
 </table>

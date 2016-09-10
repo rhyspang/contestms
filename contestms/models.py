@@ -74,6 +74,7 @@ class GradeInfo(models.Model):
     accept_sub_time = models.DateTimeField(null=True)
     sub_times = models.PositiveSmallIntegerField(default=0)
     wrong_times = models.PositiveSmallIntegerField(default=0)
+    is_fb = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.user.username + '-' + self.question.title

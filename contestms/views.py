@@ -65,6 +65,12 @@ def getSeconds(t):
     return time.mktime(t.timetuple())
 
 
+def getTimePercentage(c_id):
+    contest = get_object_or_404(Contest, pk=c_id)
+    used_time = 100 * (getSeconds(datetime.now()) - getSeconds(contest.start_time)) / contest.duration.seconds
+    return used_time
+
+
 @login_required
 def contest_detail_list(request, pk):
     temp_var = {}
@@ -74,10 +80,7 @@ def contest_detail_list(request, pk):
     temp_var['questions_info'] = questions_info
     temp_var['c_id'] = pk
 
-    contest = get_object_or_404(Contest, pk=pk)
-    used_time = 100 * (getSeconds(datetime.now()) - getSeconds(contest.start_time)) / contest.duration.seconds
-    temp_var['used_time'] = used_time
-
+    temp_var['used_time'] = getTimePercentage(pk)
     return render(request, 'contestms/contest_detail.html', temp_var)
 
 
@@ -88,7 +91,6 @@ def contest_detail_rank(request, pk):
     info_items = GradeInfo.objects.filter(contest=pk)
     contestant_list = []
     names = []
-    fb = []
     c = None
     for item in info_items:
         if item.user.username not in names:
@@ -103,7 +105,9 @@ def contest_detail_rank(request, pk):
         q.wrong_times = item.wrong_times
         q.sub_times = item.sub_times
         q.ac_time = item.accept_sub_time
+        q.is_fb = item.is_fb
         q.complete_info()
+
         c.questions.append(q)
     c.complete_info()
     contestant_list.append(c)
@@ -117,10 +121,7 @@ def contest_detail_rank(request, pk):
         q_alpha.append(alpha[i])
     temp_var['q_alpha'] = q_alpha
 
-    contest = get_object_or_404(Contest, pk=pk)
-    used_time = 100 * (getSeconds(datetime.now()) - getSeconds(contest.start_time)) / contest.duration.seconds
-    temp_var['used_time'] = used_time
-
+    temp_var['used_time'] = getTimePercentage(pk)
     return render(request, 'contestms/contest_detail_rank.html', temp_var)
 
 
@@ -130,6 +131,7 @@ def cmp(x, y):
     return y.ac_num - x.ac_num
 
 
+# Question is short of question to contestant, 以区别模板中的Question
 class QuestionToCtt(object):
     def __init__(self):
         self.accepted = False
@@ -138,6 +140,7 @@ class QuestionToCtt(object):
         self.ac_time = None
         self.penalty = 0
         self.is_fb = False
+        self.id_in_contest = 0
 
     def complete_info(self):
         if self.accepted:
@@ -163,15 +166,19 @@ class Contestant(object):
 def contest_detail_info(request, pk):
     temp_var = {'c_id': pk}
     GradeInfo.objects.order_by()
-
+    temp_var['used_time'] = getTimePercentage(pk)
     return render(request, 'contestms/contest_detail_info.html', temp_var)
 
 
 @login_required
-def question_detail(request, question_id):
-    q = get_object_or_404(Question, pk=question_id)
-    temp_var = {'question': q}
+def question_detail(request, c_id, question_id):
+    temp_var = {}
 
+    temp_var['used_time'] = getTimePercentage(c_id)
+    temp_var['alpha_id'] = alpha[int(question_id) - 1]
+    q = get_object_or_404(Question, pk=question_id)
+    temp_var['question'] = q
+    temp_var['c_id'] = c_id
     examples = Example.objects.filter(question=question_id)
     temp_var['examples'] = examples
     return render(request, 'contestms/question_detail.html', temp_var)
@@ -236,13 +243,10 @@ def manager_contest_update(request, contest_id):
         accepted = request.POST.get('accepted')
 
         bool_accepted = False if accepted == 'False' else True
-
         user = get_object_or_404(User, pk=u_id)
         question = get_object_or_404(Question, pk=q_id)
         contest = get_object_or_404(Contest, pk=contest_id)
-
         now_t = datetime.now()
-
         sub_t = datetime(1, 1, 1, 0, 0, 0) + (now_t - contest.start_time)
 
         s = SubmitInfo.objects.create(user=user, question=question,
@@ -254,16 +258,34 @@ def manager_contest_update(request, contest_id):
                               accepted
         temp_var['accepted'] = bool_accepted
 
-        item = get_object_or_404(GradeInfo, contest=contest_id, user=user, question=question)
+        # item = get_object_or_404(GradeInfo, contest=contest_id, user=user, question=question)
+        # item.sub_times += 1
+        # if bool_accepted and item.accept is False:
+        #     item.accept = True
+        #     item.accept_sub_time = s.sub_time
+        # if not bool_accepted:
+        #     item.wrong_times += 1
+        # item.save()
 
-        item.sub_times += 1
-        if bool_accepted and item.accept is False:
-            item.accept = True
-            item.accept_sub_time = s.sub_time
-        if not bool_accepted:
-            item.wrong_times += 1
-        item.save()
+        updateGradeInfo(contest_id, user, question, bool_accepted, s.sub_time)
     return render(request, 'contestms/manager_contest_update.html', temp_var)
+
+
+questionAccepted = []
+
+
+def updateGradeInfo(c_id, u_id, q_id, accept, sub_time):
+    item = get_object_or_404(GradeInfo, contest=c_id, user=u_id, question=q_id)
+    item.sub_times += 1
+    if accept and item.accept is False:
+        item.accept = True
+        item.accept_sub_time = sub_time
+        if q_id not in questionAccepted:
+            questionAccepted.append(q_id)
+            item.is_fb = True
+    if not accept:
+        item.wrong_times += 1
+    item.save()
 
 
 def manager_contest_rank(request, pk):
