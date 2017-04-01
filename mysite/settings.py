@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
@@ -26,8 +25,6 @@ SECRET_KEY = '-!(n+mx0kf=ldgk=qir9)otz%3$q*o894ho7su)m)$c4@h(a)k'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
-
 
 # Application definition
 
@@ -75,7 +72,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
@@ -87,7 +83,6 @@ DATABASES = {
         'PASSWORD': 'sefd',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -107,7 +102,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
@@ -121,15 +115,14 @@ USE_L10N = True
 
 USE_TZ = False
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = (
-    ("libs", os.path.join(STATIC_ROOT, "libs").replace('\\','/')),
-    )
+    ("libs", os.path.join(STATIC_ROOT, "libs").replace('\\', '/')),
+)
 LOGIN_REDIRECT_URL = '/accounts/'
 
 STATICFILES_FINDERS = (
@@ -137,11 +130,7 @@ STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.AppDirectoriesFinder"
 )
 
-
-
 AUTH_USER_MODEL = 'contestms.User'
-
-
 
 PROJECT_ROOT = os.path.dirname(__file__)
 
@@ -149,10 +138,10 @@ PROJECT_ROOT = os.path.dirname(__file__)
 BOOTSTRAP3 = {
 
     # The URL to the jQuery JavaScript file
-    'jquery_url': '/static/libs/jquery.min.js',
+    'jquery_url': '/static/contestms/libs/jquery.min.js',
 
     # The Bootstrap base URL
-    'base_url': '/static/libs/bootstrap/',
+    'base_url': '/static/contestms/libs/bootstrap/',
 
     # The complete URL to the Bootstrap CSS file (None means derive it from base_url)
     'css_url': None,
@@ -194,7 +183,7 @@ BOOTSTRAP3 = {
     'success_css_class': 'has-success',
 
     # Renderers (only set these if you have studied the source and understand the inner workings)
-    'formset_renderers':{
+    'formset_renderers': {
         'default': 'bootstrap3.renderers.FormsetRenderer',
     },
     'form_renderers': {
